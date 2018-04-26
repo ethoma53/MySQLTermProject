@@ -33,6 +33,7 @@ CREATE TABLE `application` (
   `status` varchar(45) NOT NULL,
   `Job_jobId` int(11) NOT NULL,
   `dateApplied` datetime NOT NULL,
+  `decisionDate` DATETIME,
   PRIMARY KEY (`appId`),
   KEY `fk_Application_User1_idx` (`User_userId`),
   KEY `fk_Application_Job1_idx` (`Job_jobId`),

@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `cartProject`.`Application` (
   `status` VARCHAR(45) NOT NULL,
   `Job_jobId` INT NOT NULL,
   `dateApplied` DATETIME NOT NULL,
+  `decisionDate` DATETIME,
   PRIMARY KEY (`appId`),
   INDEX `fk_Application_User1_idx` (`User_userId` ASC),
   INDEX `fk_Application_Job1_idx` (`Job_jobId` ASC),
