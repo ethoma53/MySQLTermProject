@@ -4,38 +4,28 @@ CREATE PROCEDURE archiveApplications()
 BEGIN	
     DECLARE done INT DEFAULT 0;
     DECLARE application_appId INT;
-	DECLARE application_User_userId INT;
+    DECLARE application_User_userId INT;
     DECLARE application_status VARCHAR(45);
-	DECLARE application_Job_jobId INT;
-	DECLARE application_dateApplied DATETIME;
+    DECLARE application_Job_jobId INT;
+    DECLARE application_dateApplied DATETIME;
     DECLARE application_decisionDate DATETIME;
     DECLARE applicationRec cursor for select appId, User_userId, status, Job_jobId, dateApplied, decisionDate FROM application;
     DECLARE continue handler FOR NOT FOUND SET done = 1;
     
     SET SQL_SAFE_UPDATES=0;
     OPEN applicationRec;
-	REPEAT
-		FETCH applicationRec INTO application_appId, application_User_userId, application_status, application_Job_jobId, application_dateApplied, application_decisionDate;
-			IF application_appId NOT IN (SELECT appId FROM archive) and (application_status LIKE ('%accepted%') OR application_status LIKE ('%rejected%'))
-            THEN
-				INSERT INTO archive
-				VALUES(application_appId, application_User_userId, application_status, application_Job_jobId, application_dateApplied, application_decisionDate);
-			END IF;
+    REPEAT
+	FETCH applicationRec INTO application_appId, application_User_userId, application_status, application_Job_jobId, application_dateApplied, application_decisionDate;
+	IF application_appId NOT IN (SELECT appId FROM archive) and (application_status LIKE ('%accepted%') OR application_status LIKE ('%rejected%'))
+	THEN
+		INSERT INTO archive
+		VALUES(application_appId, application_User_userId, application_status, application_Job_jobId, application_dateApplied, application_decisionDate);
+		END IF;
     UNTIL done
-	END REPEAT;
+    END REPEAT;
     
     DELETE FROM application
-	WHERE status LIKE ('% rejected%') 
+    WHERE status LIKE ('% rejected%') 
     OR status LIKE ('% accepted %');
     SET SQL_SAFE_UPDATES=1;
 END$$
-
-
-  
-        
-       
-
-
-    
-
-
