@@ -1,0 +1,56 @@
+#userMenu ul { 
+  list-style-type: none; 
+  margin: 0; 
+  padding: 0; 
+  overflow: hidden; 
+  background-color: #1590C2;
+} 
+#userMenu ul li { 
+  float: left; 
+}
+#userMenu ul li a { 
+  display: block; 
+  color: white;
+  text-align: center; 
+  padding: 14px 16px; 
+  text-decoration: none; 
+}
+#userMenu ul li a:hover, 
+#userMenu .active { 
+  background-color: #ddd; 
+  color: black; 
+}
+
+#adminMenu ul { 
+  list-style-type: none; 
+  margin: 0; 
+  padding: 0; 
+  overflow: hidden; 
+  background-color: #1590C2;
+} 
+#adminMenu ul li { 
+  float: left; 
+}
+#adminMenu ul li a { 
+  display: block; 
+  color: white;
+  text-align: center; 
+  padding: 14px 16px; 
+  text-decoration: none; 
+}
+#adminMenu ul li a:hover, 
+#adminMenu .active { 
+  background-color: #ddd; 
+  color: black; 
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+td,
+th {
+	padding: 5px;
+	border-bottom: 1px solid #aaa;
+}
