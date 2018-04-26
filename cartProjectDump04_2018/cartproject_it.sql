@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS `it`;
 CREATE TABLE `it` (
   `EmpJob_Employee_empId` int(11) NOT NULL,
   `EmpJob_Job_jobId` int(11) NOT NULL,
-  `startDate` datetime NOT NULL,
+  `startDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `positionLength` int(11) NOT NULL,
   PRIMARY KEY (`EmpJob_Employee_empId`,`EmpJob_Job_jobId`),
   CONSTRAINT `fk_IT_EmpJob1` FOREIGN KEY (`EmpJob_Employee_empId`, `EmpJob_Job_jobId`) REFERENCES `empjob` (`Employee_empId`, `Job_jobId`) ON DELETE NO ACTION ON UPDATE NO ACTION

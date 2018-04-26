@@ -110,7 +110,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `cartProject`.`Driver` (
   `EmpJob_Employee_empId` INT NOT NULL,
   `EmpJob_Job_jobId` INT NOT NULL,
-  `startDate` DATETIME NOT NULL,
+  `startDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `positionLength` INT NOT NULL,
   PRIMARY KEY (`EmpJob_Employee_empId`, `EmpJob_Job_jobId`),
   CONSTRAINT `fk_Driver_EmpJob1`
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `cartProject`.`Mechanic` (
   `EmpJob_Employee_empId` INT NOT NULL,
   `EmpJob_Job_jobId` INT NOT NULL,
   `certified` TINYINT NOT NULL,
-  `startDate` DATETIME NOT NULL,
+  `startDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `positionLength` INT NOT NULL,
   PRIMARY KEY (`EmpJob_Employee_empId`, `EmpJob_Job_jobId`),
   CONSTRAINT `fk_Mechanic_EmpJob1`
@@ -144,7 +144,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `cartProject`.`IT` (
   `EmpJob_Employee_empId` INT NOT NULL,
   `EmpJob_Job_jobId` INT NOT NULL,
-  `startDate` DATETIME NOT NULL,
+  `startDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `positionLength` INT NOT NULL,
   PRIMARY KEY (`EmpJob_Employee_empId`, `EmpJob_Job_jobId`),
   CONSTRAINT `fk_IT_EmpJob1`
