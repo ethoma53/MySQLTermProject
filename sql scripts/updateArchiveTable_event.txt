@@ -2,6 +2,6 @@ SET GLOBAL event_scheduler = ON;
 
 CREATE EVENT updateApplications
 	ON SCHEDULE EVERY 2 DAY
-    DO
+    	DO
 		CALL archiveApplications();
 
