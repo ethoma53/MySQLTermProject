@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS `application`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `application` (
-  `appId` int(11) NOT NULL,
+  `appId` int(11) NOT NULL AUTO_INCREMENT,
   `User_userId` int(11) NOT NULL,
   `status` varchar(45) NOT NULL,
   `Job_jobId` int(11) NOT NULL,
@@ -40,6 +40,9 @@ CREATE TABLE `application` (
   CONSTRAINT `fk_Application_Job1` FOREIGN KEY (`Job_jobId`) REFERENCES `job` (`jobId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Application_User1` FOREIGN KEY (`User_userId`) REFERENCES `user` (`userId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE Application AUTO_INCREMENT = 171; -- did this because of way initial data was structured. should just be auto from 
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
