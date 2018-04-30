@@ -34,9 +34,12 @@ CREATE TABLE IF NOT EXISTS `cartProject`.`User` (
   `age` INT NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `phoneNumber` VARCHAR(16) NOT NULL,
-  `password` text NOT NULL,
-  `type` text NOT NULL,
-  PRIMARY KEY (`userId`))
+  `password` VARCHAR(45) NOT NULL,
+  `type` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`userId`),
+  KEY `email_lookup` (`email`),
+  KEY `login` (`email`,`password`)
+  )
 ENGINE = InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

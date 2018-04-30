@@ -26,9 +26,12 @@ CREATE TABLE IF NOT EXISTS `cartProject`.`User` (
   `age` INT NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `phoneNumber` VARCHAR(16) NOT NULL,
-  `password` text NOT NULL,
-  `type` text NOT NULL,
-  PRIMARY KEY (`userId`))
+  `password` VARCHAR(45) NOT NULL,
+  `type` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`userId`),
+  KEY `email_lookup` (`email`),
+  KEY `login` (`email`,`password`)
+  )
 ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
@@ -71,6 +74,8 @@ CREATE TABLE `application` (
   PRIMARY KEY (`appId`),
   KEY `fk_Application_User1_idx` (`User_userId`),
   KEY `fk_Application_Job1_idx` (`Job_jobId`),
+  KEY `app_user` (`User_userId`),
+  KEY `app_userid` (`User_userId`,`appId`),
   CONSTRAINT `fk_Application_Job1` FOREIGN KEY (`Job_jobId`) REFERENCES `job` (`jobId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Application_User1` FOREIGN KEY (`User_userId`) REFERENCES `user` (`userId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
