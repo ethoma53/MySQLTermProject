@@ -8,14 +8,14 @@
 	header('location: login.php');
   }
 ?>
-
+<br>
 <h2>Welcome <?php if (isset($_SESSION['user'])) : echo $_SESSION['user']['firstName'] . " " . $_SESSION['user']['lastName']; endif ?> !</h2>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Home</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 	<div class="header">
@@ -53,6 +53,7 @@
 		</div>
 	</div>
 </body>
+<a href="index.php">Back to home</a>
 </html>
 
 

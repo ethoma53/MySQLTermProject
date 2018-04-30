@@ -19,13 +19,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Admin: Update Application Status</title>
+	<title>Admin: Delete Application</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<style>
 		.header {
 			background: #003366;
 		}
-		button[name=update] {
+		button[name=delete] {
 			background: #003366;
 		}
 	</style>
@@ -36,14 +36,12 @@
 	<a href="index.php?logout='1'" style="color: red;">logout</a>
 	</div>
 	<div>
-		<h3>Please enter the information for the application you wish to update, </h3>
-		<h3>then choose the status you wish to input.</h3>
+		<h3>Please enter the information for the application you wish to delete.</h3>
 	</div>
 	<div class="header">
-		<h2>Admin - Update Application Status</h2>
+		<h2>Admin - Delete Application</h2>
 	</div>
-		
-	<form method="post" action="update.php">
+	<form method="post" action="delete.php">
 
 		<?php echo display_error(); ?>
 
@@ -60,23 +58,12 @@
 			<input type="text" name="appId" id="appId">
 		</div>
 		<div class="input-group">
-			<label>Application Status</label>
-			<select name="taskOption">
-				<option value="not opened">Not opened</option>
-				<option value="pending">Pending</option>
-				<option value="accepted">Accepted</option>
-				<option value="rejected">Rejected</option>
-			</select>
-		</div>
-		<div class="input-group">
-			<button type="submit" class="btn" name="update">Update Status</button>
+			<button type="submit" class="btn" name="delete">Delete Application</button>
 		</div>
 	</form>
-	
+</body>
 <br>
 <br>
 <a href="adminView.php">Back to admin home</a>
-</body>
 </html>
-
-<?php include_once('templates/footer.php'); ?>
+<?php require "templates/footer.php"; ?>

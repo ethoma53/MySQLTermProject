@@ -10,6 +10,12 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
+<div class="navbar">
+  <a href="register.php">Sign up</a>
+  <a href="login.php">Sign in</a>
+  <a href="jobs.php">Opportunities</a>
+  <a href="contact.php">Contact</a>
+</div>
 <div class="header">
 	<h2>Register</h2>
 </div>

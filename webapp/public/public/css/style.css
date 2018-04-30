@@ -74,6 +74,18 @@ body {
 	border-radius: 10px 10px 0px 0px;
 	padding: 20px;
 }
+/* Header/logo Title */
+.mainheader {
+    padding: 80px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+}
+
+/* Increase the font size of the heading */
+.mainheader h1 {
+    font-size: 40px;
+}
 
 .footer { 
     position: fixed;
@@ -85,8 +97,6 @@ body {
     color: white;
     text-align: center;
 }
-
-
 
 form, .content {
 	width: 40%;
@@ -129,6 +139,7 @@ form, .content {
 	border: none;
 	border-radius: 5px;
 }
+
 .error {
 	width: 92%; 
 	margin: 0px auto; 
@@ -161,3 +172,31 @@ form, .content {
 	display: block;
 	clear: both;
 }
+
+/* Style the top navigation bar */
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* Style the navigation bar links */
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+    float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+

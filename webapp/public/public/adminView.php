@@ -69,6 +69,7 @@
 		</div>
 	</div>
 </body>
+<a href="index.php">Back to home</a>
 </html>
 
 <?php include_once('templates/footer.php'); ?>

@@ -262,12 +262,65 @@ function update()
 	$update -> bindparam(':id', $appId);
 	$update -> bindparam(':status', $status);
 	$update -> bindparam(':decisionDate', $decisionDate);
-	$update -> execute();
 	
-	$_SESSION['success'] = "Application status for ". $first . " " . $last . " successfully updated";
-	header('location: adminView.php');
+	try {  
+		$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$connection->beginTransaction();
+		$update->execute();
+		$connection->commit();
+		$_SESSION['success'] = "Application" . " for ". $first . " " . $last . " successfully updated";
+		header('location: adminView.php');
+		
+		} catch (Exception $e) {
+		$connection->rollBack();
+		echo "Failed: " . $e->getMessage();
+	}
+
 	} 
 	
+//call function to update status if update is submitted
+if (isset($_POST['update'])) {
+	update();
+}
+
+//call function to delete status if update is submitted
+if (isset($_POST['delete'])) {
+	delete();
+}
+
+//function to delete status of an application
+function delete()
+{
+	// call these variables with the global keyword to make them available in function
+	global $connection, $errors, $email;
+	
+	// receive all input values from the form. Call the e() function
+    // defined below to escape form values
+	$last = isset($_POST['lastName']) ? e($_POST['lastName']) : "";
+	$first = isset($_POST['firstName']) ? e($_POST['firstName']) : "";
+	$appId = isset($_POST['appId']) ? e($_POST['appId']) : "";
+	
+	//create query
+	$delete_statement = "DELETE FROM Application WHERE appId = :id";
+	
+	$update = $connection -> prepare($delete_statement);
+	$update -> bindparam(':id', $appId);
+	
+	try {  
+			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$connection->beginTransaction();
+			$update->execute();
+			$connection->commit();
+			$_SESSION['success'] = "Application" . " for ". $first . " " . $last . " successfully deleted";
+			header('location: adminView.php');
+		
+			} catch (Exception $e) {
+				$connection->rollBack();
+			echo "Failed: " . $e->getMessage();
+	}
+	
+	
+	} 
 
 // ...
 function isAdmin()
@@ -278,3 +331,4 @@ function isAdmin()
 		return false;
 	}
 }
+
