@@ -14,6 +14,16 @@
 	header("location: login.php");
   }
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<div style="text-align: right;">
+	<a href="index.php?logout='1'" style="color: red;">logout</a>
+	</div>
 <br>
 <h2>Application status for <?php if (isset($_SESSION['user'])) : echo $_SESSION['user']['firstName'] . " " . $_SESSION['user']['lastName']; endif ?> :</h2>
 <br>
@@ -75,7 +85,7 @@ if (isset($result)) {
 
 <br>
 <br>
-<a href="index.php">Back to home</a>
+<a href="userView.php">Back to user home</a>
 
 <?php include_once('templates/footer.php'); ?>
 

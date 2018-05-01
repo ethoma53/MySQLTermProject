@@ -253,7 +253,16 @@ function update()
 	$first = isset($_POST['firstName']) ? e($_POST['firstName']) : "";
 	$appId = isset($_POST['appId']) ? e($_POST['appId']) : "";
 	$status = isset($_POST['taskOption']) ? e($_POST['taskOption']) : "";
-	$decisionDate = date("Y-m-d H:i:s", time());
+	//$decisionDate = date("Y-m-d H:i:s", time());
+	
+	if ($status == "pending" || $status == "not opened")
+	{
+		$decisionDate = NULL;
+	}
+	else
+	{
+		$decisionDate = date("Y-m-d H:i:s", time());
+	}
 	
 	//create query
 	$update_statement = "UPDATE Application set status = :status, decisionDate = :decisionDate WHERE appId = :id";
@@ -262,10 +271,20 @@ function update()
 	$update -> bindparam(':id', $appId);
 	$update -> bindparam(':status', $status);
 	$update -> bindparam(':decisionDate', $decisionDate);
-	$update -> execute();
 	
-	$_SESSION['success'] = "Application status for ". $first . " " . $last . " successfully updated";
-	header('location: adminView.php');
+	try {  
+		$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$connection->beginTransaction();
+		$update->execute();
+		$connection->commit();
+		$_SESSION['success'] = "Application" . " for ". $first . " " . $last . " successfully updated";
+		header('location: adminView.php');
+		
+		} catch (Exception $e) {
+		$connection->rollBack();
+		echo "Failed: " . $e->getMessage();
+	}
+
 	} 
 	
 //call function to update status if update is submitted
@@ -295,10 +314,21 @@ function delete()
 	
 	$update = $connection -> prepare($delete_statement);
 	$update -> bindparam(':id', $appId);
-	$update -> execute();
 	
-	$_SESSION['success'] = "Application for ". $first . " " . $last . " successfully deleted";
-	header('location: adminView.php');
+	try {  
+			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$connection->beginTransaction();
+			$update->execute();
+			$connection->commit();
+			$_SESSION['success'] = "Application" . " for ". $first . " " . $last . " successfully deleted";
+			header('location: adminView.php');
+		
+			} catch (Exception $e) {
+				$connection->rollBack();
+			echo "Failed: " . $e->getMessage();
+	}
+	
+	
 	} 
 
 // ...
@@ -310,3 +340,4 @@ function isAdmin()
 		return false;
 	}
 }
+

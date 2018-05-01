@@ -32,6 +32,9 @@
 </head>
 <body>
 	<br>
+	<div style="text-align: right;">
+	<a href="index.php?logout='1'" style="color: red;">logout</a>
+	</div>
 	<div>
 		<h3>Please enter the information for the application you wish to update, </h3>
 		<h3>then choose the status you wish to input.</h3>
@@ -39,18 +42,6 @@
 	<div class="header">
 		<h2>Admin - Update Application Status</h2>
 	</div>
-	<div class="content">
-		<!-- notification message -->
-		<?php if (isset($_SESSION['success'])) : ?>
-			<div class="error success" >
-				<h3>
-					<?php 
-						echo $_SESSION['success']; 
-						unset($_SESSION['success']);
-					?>
-				</h3>
-			</div>
-		<?php endif ?>
 		
 	<form method="post" action="update.php">
 
@@ -81,6 +72,10 @@
 			<button type="submit" class="btn" name="update">Update Status</button>
 		</div>
 	</form>
+	
+<br>
+<br>
+<a href="adminView.php">Back to admin home</a>
 </body>
 </html>
 

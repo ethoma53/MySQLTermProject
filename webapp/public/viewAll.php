@@ -15,13 +15,23 @@
 	header("location: login.php");
   }
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registration system PHP and MySQL</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<div style="text-align: right;">
+	<a href="index.php?logout='1'" style="color: red;">logout</a>
+	</div>
 <br>
 <form method="post" action="viewAll.php" style = "padding: 0px; border: 0px; background: #F8F8FF; text-align: right;">
 	<button type="submit" class="btn" name="special">Click to see only pending applications</button>
 </form>
 <br>
 <form method="post" action="viewAll.php" style = "padding: 0px; border: 0px; background: #F8F8FF; text-align: right;">
-	<button type="submit" class="btn" name="reurn">Click to see all applications</button>
+	<button type="submit" class="btn" name="return">Click to see all applications</button>
 </form>
 
 
@@ -38,13 +48,13 @@ if (isset($_POST['special']))
 	
     $sql = "SELECT a.appId, b.firstName, b.lastName, a.dateApplied, c.jobName, a.status, 
 			IFNULL(a.decisionDate, 'N/A') AS decisionDate, datediff(NOW(), a.dateApplied) AS NumDaysInQueue
-		FROM cartproject.application as a
-		INNER JOIN cartproject.user as b
+		FROM Application as a
+		INNER JOIN User as b
 		ON a.User_userId = b.userId
-		INNER JOIN cartproject.job as c
+		INNER JOIN Job as c
 		ON a.Job_jobId = c.jobId
 		WHERE (a.status LIKE ('%not opened%') OR a.status LIKE ('%pending%'))
-		AND datediff(NOW(), a.dateApplied) >= 30
+		AND datediff(NOW(), a.dateApplied) >= 0
 		AND a.User_userId NOT IN (SELECT User_userId 
 						  FROM employee)
 		ORDER BY dateApplied;";

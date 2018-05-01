@@ -1,7 +1,7 @@
 <?php 
+	include_once('templates/header.php');
 	include_once('functions.php');
 	include_once('adminMenu.php');
-	include_once('templates/header.php');
 	
 	if (!isAdmin()) {
 	$_SESSION['msg'] = "You must log in first";
@@ -24,16 +24,18 @@
 		.header {
 			background: #003366;
 		}
-		button[name=register_btn] {
+		button[name=submit] {
 			background: #003366;
 		}
 	</style>
 </head>
 <body>
+	<div style="text-align: right;">
+	<a href="index.php?logout='1'" style="color: red;">logout</a>
+	</div>
 	<div class="header">
 		<h2>Admin - create user</h2>
 	</div>
-	
 	<form method="post" action="create_user.php">
 
 		<?php echo display_error(); ?>
@@ -77,6 +79,10 @@
 			<button type="submit" class="btn" name="submit">Create user</button>
 		</div>
 	</form>
+	
+<br>
+<br>
+<a href="adminView.php">Back to admin home</a>
 </body>
 </html>
 

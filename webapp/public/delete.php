@@ -32,25 +32,15 @@
 </head>
 <body>
 	<br>
+	<div style="text-align: right;">
+	<a href="index.php?logout='1'" style="color: red;">logout</a>
+	</div>
 	<div>
 		<h3>Please enter the information for the application you wish to delete.</h3>
 	</div>
 	<div class="header">
 		<h2>Admin - Delete Application</h2>
 	</div>
-	<div class="content">
-		<!-- notification message -->
-		<?php if (isset($_SESSION['success'])) : ?>
-			<div class="error success" >
-				<h3>
-					<?php 
-						echo $_SESSION['success']; 
-						unset($_SESSION['success']);
-					?>
-				</h3>
-			</div>
-		<?php endif ?>
-		
 	<form method="post" action="delete.php">
 
 		<?php echo display_error(); ?>
@@ -72,5 +62,8 @@
 		</div>
 	</form>
 </body>
+<br>
+<br>
+<a href="adminView.php">Back to admin home</a>
 </html>
 <?php require "templates/footer.php"; ?>

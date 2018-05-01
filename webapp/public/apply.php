@@ -1,7 +1,7 @@
 <?php
+	include_once('templates/header.php');
 	include_once('userMenu.php');
 	include_once("config/config.php");      
-	include_once('templates/header.php');
 	include_once('functions.php');
 	require "config/config.php";
 	if (!isLoggedIn()) {
@@ -51,6 +51,9 @@ if (isset($_POST['apply']) && isset($_SESSION['user'])) {
 
 <!DOCTYPE html>
 <html>
+<div style="text-align: right;">
+	<a href="index.php?logout='1'" style="color: red;">logout</a>
+	</div>
 <head>
 	<title>Admin: Update Application Status</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -67,8 +70,7 @@ if (isset($_POST['apply']) && isset($_SESSION['user'])) {
     <blockquote>Application successfully added.</blockquote>
 <?php } ?>
 <br>
-<br>
-<h2>Apply for a job.</h2>
+<h2>Apply for a job:</h2>
 <br>
 <body>
 <br>
@@ -84,7 +86,8 @@ if (isset($_POST['apply']) && isset($_SESSION['user'])) {
 	</select>
     <input type="submit" name="apply">
 </form>
-
+<br>
+<br>
 <a href="userView.php">Back to user home</a>
 </body>
 </html>
