@@ -253,7 +253,16 @@ function update()
 	$first = isset($_POST['firstName']) ? e($_POST['firstName']) : "";
 	$appId = isset($_POST['appId']) ? e($_POST['appId']) : "";
 	$status = isset($_POST['taskOption']) ? e($_POST['taskOption']) : "";
-	$decisionDate = date("Y-m-d H:i:s", time());
+	//$decisionDate = date("Y-m-d H:i:s", time());
+	
+	if ($status == "pending" || $status == "not opened")
+	{
+		$decisionDate = NULL;
+	}
+	else
+	{
+		$decisionDate = date("Y-m-d H:i:s", time());
+	}
 	
 	//create query
 	$update_statement = "UPDATE Application set status = :status, decisionDate = :decisionDate WHERE appId = :id";
