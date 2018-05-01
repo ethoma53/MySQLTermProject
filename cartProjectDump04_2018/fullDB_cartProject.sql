@@ -487,6 +487,68 @@ INSERT INTO `application` VALUES (170,85,' accepted ',3,'2017-09-01 21:27:56','2
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
 UNLOCK TABLES;
 
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ALLOW_INVALID_DATES,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER acceptedStatusUpdate
+AFTER UPDATE ON cartproject.application
+FOR EACH ROW
+BEGIN
+	declare maxEmpId INT;
+	set maxEmpId = (SELECT max(empId) from employee) + 1;
+	
+	IF new.status LIKE '%accepted%'
+	THEN		
+        	IF old.User_userId NOT IN (SELECT User_userID from employee)
+        	THEN
+			-- add to employee table
+			INSERT INTO cartproject.employee(empId, User_userID, hireDate)
+			VALUES(maxEmpId, old.User_userId, NOW());
+		END IF;
+        
+        	-- add to empjob table
+        	INSERT INTO cartproject.empjob
+        	VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+				old.Job_jobId);
+		
+        	-- add to mechanic table
+        	IF old.Job_jobId = 1
+        	THEN
+			INSERT INTO cartproject.mechanic(EmpJob_Employee_empId, EmpJob_Job_jobId, certified, positionLength)
+			VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+					1, 0, 0);
+		END IF;
+        
+        	-- add to driver table
+        	IF old.Job_jobId = 2
+		THEN
+			INSERT INTO cartproject.driver(EmpJob_Employee_empId, EmpJob_Job_jobId, positionLength)
+			VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+					2, 0);
+		END IF;
+        
+		-- add to it table
+        	IF old.Job_jobId = 3
+		THEN
+			INSERT INTO cartproject.it(EmpJob_Employee_empId, EmpJob_Job_jobId, positionLength)
+			VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+					3, 0);
+		END IF;       
+    	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
 -- -----------------------------------------------------
 -- Values `cartProject`.`Archive`
 -- -----------------------------------------------------
@@ -713,7 +775,6 @@ INSERT INTO `login` VALUES (103,'rpullen@uncc.edu','81dc9bdb52d04dc20036dbd8313e
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -722,12 +783,21 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- -----------------------------------------------------
--- Events `cartProject`
--- -----------------------------------------------------
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- -----------------------------------------------------
+-- Events for 'cartProject'
+-- -----------------------------------------------------
 /*!50106 SET @save_time_zone= @@TIME_ZONE */ ;
-/*!50106 DROP EVENT IF EXISTS `archivec` */;
+/*!50106 DROP EVENT IF EXISTS `updateApplications` */;
 DELIMITER ;;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
@@ -736,10 +806,10 @@ DELIMITER ;;
 /*!50003 SET character_set_results = utf8 */ ;;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
-/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ALLOW_INVALID_DATES,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = 'SYSTEM' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`root`@`localhost`*/ /*!50106 EVENT `archivec` ON SCHEDULE EVERY 3 DAY STARTS '2018-04-10 09:11:30' ON COMPLETION NOT PRESERVE ENABLE DO CALL archiveApplications() */ ;;
+/*!50106 CREATE*/ /*!50117 DEFINER=`root`@`localhost`*/ /*!50106 EVENT `updateApplications` ON SCHEDULE EVERY 2 DAY STARTS '2018-05-01 08:33:07' ON COMPLETION NOT PRESERVE ENABLE DO CALL archiveApplications() */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;;
@@ -749,7 +819,7 @@ DELIMITER ;
 /*!50106 SET TIME_ZONE= @save_time_zone */ ;
 
 -- -----------------------------------------------------
--- Routines `cartProject`
+-- Routines for 'cartProject'
 -- -----------------------------------------------------
 /*!50003 DROP PROCEDURE IF EXISTS `archiveApplications` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -759,17 +829,37 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ALLOW_INVALID_DATES,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveApplications`()
-BEGIN
+BEGIN	
+    DECLARE done INT DEFAULT 0;
+    DECLARE application_appId INT;
+    DECLARE application_User_userId INT;
+    DECLARE application_status VARCHAR(45);
+    DECLARE application_Job_jobId INT;
+    DECLARE application_dateApplied DATETIME;
+    DECLARE application_decisionDate DATETIME;
+    DECLARE applicationRec cursor for select appId, User_userId, status, Job_jobId, dateApplied, decisionDate FROM application;
+    DECLARE continue handler FOR NOT FOUND SET done = 1;
+    
+    SET SQL_SAFE_UPDATES=0;
+    OPEN applicationRec;
+    REPEAT
+	FETCH applicationRec INTO application_appId, application_User_userId, application_status, application_Job_jobId, application_dateApplied, application_decisionDate;
+	IF application_appId NOT IN (SELECT appId FROM archive) AND (application_status LIKE ('%accepted%') OR application_status LIKE ('%rejected%'))
+	THEN
 		INSERT INTO archive
-        SELECT * FROM application
-        WHERE status = 'rejected' OR 'accepted';
-        
-        DELETE FROM application
-        WHERE status = 'rejected' OR 'accepted';
-	END ;;
+		VALUES(application_appId, application_User_userId, application_status, application_Job_jobId, application_dateApplied, application_decisionDate);
+		END IF;
+    UNTIL done
+    END REPEAT;
+    
+    DELETE FROM application
+    WHERE status LIKE ('% rejected%') 
+    OR status LIKE ('% accepted %');
+    SET SQL_SAFE_UPDATES=1;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -783,5 +873,7 @@ DELIMITER ;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
 
 

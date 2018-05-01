@@ -123,6 +123,67 @@ INSERT INTO `application` VALUES (170,85,' accepted ',3,'2017-09-01 21:27:56','2
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
 UNLOCK TABLES;
 
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ALLOW_INVALID_DATES,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER acceptedStatusUpdate
+AFTER UPDATE ON cartproject.application
+FOR EACH ROW
+BEGIN
+	declare maxEmpId INT;
+	set maxEmpId = (SELECT max(empId) from employee) + 1;
+	
+	IF new.status LIKE '%accepted%'
+	THEN		
+        	IF old.User_userId NOT IN (SELECT User_userID from employee)
+        	THEN
+			-- add to employee table
+			INSERT INTO cartproject.employee(empId, User_userID, hireDate)
+			VALUES(maxEmpId, old.User_userId, NOW());
+		END IF;
+        
+        	-- add to empjob table
+        	INSERT INTO cartproject.empjob
+        	VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+				old.Job_jobId);
+		
+        	-- add to mechanic table
+        	IF old.Job_jobId = 1
+        	THEN
+			INSERT INTO cartproject.mechanic(EmpJob_Employee_empId, EmpJob_Job_jobId, certified, positionLength)
+			VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+					1, 0, 0);
+		END IF;
+        
+        	-- add to driver table
+        	IF old.Job_jobId = 2
+		THEN
+			INSERT INTO cartproject.driver(EmpJob_Employee_empId, EmpJob_Job_jobId, positionLength)
+			VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+					2, 0);
+		END IF;
+        
+		-- add to it table
+        	IF old.Job_jobId = 3
+		THEN
+			INSERT INTO cartproject.it(EmpJob_Employee_empId, EmpJob_Job_jobId, positionLength)
+			VALUES((SELECT empId FROM cartproject.employee WHERE User_userId = old.User_userId),
+					3, 0);
+		END IF;       
+    	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
