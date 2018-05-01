@@ -255,37 +255,46 @@ function update()
 	$status = isset($_POST['taskOption']) ? e($_POST['taskOption']) : "";
 	//$decisionDate = date("Y-m-d H:i:s", time());
 	
-	if ($status == "pending" || $status == "not opened")
-	{
-		$decisionDate = NULL;
-	}
-	else
-	{
-		$decisionDate = date("Y-m-d H:i:s", time());
+	// form validation: ensure that the form is correctly filled ...
+	// by adding (array_push()) corresponding error unto $errors array
+	if (empty($appId)){ 
+		//array_push($errors, "Application ID is required"); 
+		$errors = array("Application ID is required");
 	}
 	
-	//create query
-	$update_statement = "UPDATE Application set status = :status, decisionDate = :decisionDate WHERE appId = :id";
+	if (count($errors) == 0) {
+		if ($status == "pending" || $status == "not opened")
+		{
+			$decisionDate = NULL;
+		}
+		else
+		{
+			$decisionDate = date("Y-m-d H:i:s", time());
+		}
 	
-	$update = $connection -> prepare($update_statement);
-	$update -> bindparam(':id', $appId);
-	$update -> bindparam(':status', $status);
-	$update -> bindparam(':decisionDate', $decisionDate);
+		//create query
+		$update_statement = "UPDATE Application set status = :status, decisionDate = :decisionDate WHERE appId = :id";
 	
-	try {  
-		$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$connection->beginTransaction();
-		$update->execute();
-		$connection->commit();
-		$_SESSION['success'] = "Application" . " for ". $first . " " . $last . " successfully updated";
-		header('location: adminView.php');
-		
-		} catch (Exception $e) {
-		$connection->rollBack();
-		echo "Failed: " . $e->getMessage();
-	}
+		$update = $connection -> prepare($update_statement);
+		$update -> bindparam(':id', $appId);
+		$update -> bindparam(':status', $status);
+		$update -> bindparam(':decisionDate', $decisionDate);
+	
+		try {  
+			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$connection->beginTransaction();
+			$update->execute();
+			$connection->commit();
+			$_SESSION['success'] = "Application" . " for ". $first . " " . $last . " successfully updated";
+			header('location: adminView.php');
+			
+			} catch (Exception $e) {
+			$connection->rollBack();
+			echo "Failed: " . $e->getMessage();
+		}
 
-	} 
+	}
+} 
 	
 //call function to update status if update is submitted
 if (isset($_POST['update'])) {
@@ -309,13 +318,20 @@ function delete()
 	$first = isset($_POST['firstName']) ? e($_POST['firstName']) : "";
 	$appId = isset($_POST['appId']) ? e($_POST['appId']) : "";
 	
-	//create query
-	$delete_statement = "DELETE FROM Application WHERE appId = :id";
+	// form validation: ensure that the form is correctly filled ...
+	// by adding (array_push()) corresponding error unto $errors array
+	if (empty($appId)){ 
+		array_push($errors, "Application ID is required"); 
+	}
 	
-	$update = $connection -> prepare($delete_statement);
-	$update -> bindparam(':id', $appId);
+	if (count($errors) == 0) {
+		//create query
+		$delete_statement = "DELETE FROM Application WHERE appId = :id";
 	
-	try {  
+		$update = $connection -> prepare($delete_statement);
+		$update -> bindparam(':id', $appId);
+	
+		try {  
 			$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$connection->beginTransaction();
 			$update->execute();
@@ -326,9 +342,9 @@ function delete()
 			} catch (Exception $e) {
 				$connection->rollBack();
 			echo "Failed: " . $e->getMessage();
-	}
+			}
 	
-	
+		}
 	} 
 
 // ...

@@ -27,11 +27,35 @@ catch(PDOException $error) {
 
 if (isset($_POST['apply']) && isset($_SESSION['user'])) {
     
+	$job = $_POST['taskOption'];
+	$id = $_SESSION['user']['userId'];
+	
+	//check if user already has job
+	$sql = "SELECT Job_jobId
+			FROM EmpJob
+			WHERE Employee_empId = :id";
+       $statement = $connection->prepare($sql);
+       $statement->bindParam(':id', $id);
+       $statement->execute();
+       $result = $statement->fetchAll();
+	   
+	if (isset($result)) {
+		if ($result && $statement->rowCount() > 0) {
+			foreach ($result as $row) {
+				if (e($row["Job_jobId"]) == $job)
+				{
+					$_SESSION['success'] = "You cannot apply for a job you already have";
+					header('location: userView.php');
+				}
+			}
+		}
+	}		
+	
     $new_app = array(
 		"appId" => "default",
-		"User_userId" => $_SESSION['user']['userId'],
+		"User_userId" => $id,
 		"status" => "not opened",
-		"Job_jobId" => $_POST['taskOption'],
+		"Job_jobId" => $job,
 		"dateApplied" => date("Y-m-d H:i:s", time()),
 		"decisionDate" => NULL
     );
